@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anime Assistant</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:#0b0b0b;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial;
+    color:white;
+}
+
+.container{
+    width:100%;
+    max-width:420px;
+    text-align:center;
+    position:relative;
+}
+
+img{
+    width:85%;
+    border-radius:15px;
+    box-shadow:0 0 30px rgba(255,0,200,0.6);
+}
+
+/* buttons */
+.controls{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+    padding:0 20px;
+}
+
+button{
+    padding:15px 20px;
+    border:none;
+    border-radius:50px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+#startBtn{
+    background:#ff2aa1;
+    color:white;
+}
+
+#micBtn{
+    background:#111;
+    color:#0f0;
+    font-size:22px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Anime Girl Image -->
+    <img src="https://i.imgur.com/9XqFz5C.png" alt="anime girl">
+
+    <div class="controls">
+        <button id="startBtn">START</button>
+        <button id="micBtn">🎤</button>
+    </div>
+
+</div>
+
+<script>
+let speech;
+let speaking = false;
+
+function speakGirl(){
+    if(speaking) return;
+
+    speech = new SpeechSynthesisUtterance(
+        "Hello, main tumhari anime assistant hoon. Mujhe sunne ke liye start dabao."
+    );
+    speech.lang = "hi-IN";
+    speech.rate = 1;
+    speaking = true;
+
+    speech.onend = () => {
+        speaking = false;
+        speakGirl(); // repeat bolna
+    };
+
+    window.speechSynthesis.speak(speech);
+}
+
+// START button
+document.getElementById("startBtn").onclick = () => {
+    window.speechSynthesis.cancel();
+    speaking = false;
+    speakGirl();
+};
+
+// MIC button hold logic
+const micBtn = document.getElementById("micBtn");
+
+micBtn.addEventListener("touchstart", () => {
+    window.speechSynthesis.cancel();
+    speaking = false;
+});
+
+micBtn.addEventListener("touchend", () => {
+    speakGirl();
+});
+
+// for mouse (PC)
+micBtn.addEventListener("mousedown", () => {
+    window.speechSynthesis.cancel();
+    speaking = false;
+});
+
+micBtn.addEventListener("mouseup", () => {
+    speakGirl();
+});
+</script>
+
+</body>
+</html>
